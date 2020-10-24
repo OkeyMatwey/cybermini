@@ -1,7 +1,15 @@
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from .models import Nodes
-import json
+import json, time
+
+class Task:
+    time = time.time()
+    period = time.time()
+    location = ""
+    computer = 1
+    user = ""
+    key = 1
 
 class NodeConsumer(WebsocketConsumer):
     def connect(self):

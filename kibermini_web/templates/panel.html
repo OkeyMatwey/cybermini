@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row mx-auto">
+        <div class="col">{{ user.profile.money }}</div>
+        <form method="post" class="col">
+            {% csrf_token %}
+            <div class="form-group col">
+                <label>Select location</label>
+                <select name="location" class="form-control">
+                    {% for i in locations %}
+                        <option value="{{ i.id }}">{{ i.city }}, {{ i.street }}, {{ i.building }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col">
+                <label>Select computer</label>
+                <select name="computer" class="form-control">
+                    {% for i in '12345678'|make_list %}
+                        <option>{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col">
+                <label>time</label>
+                <input name="time" type="text" class="form-control">
+            </div>
+            <div class="form-group col">
+                <label>period</label>
+                <input name="period" type="text" class="form-control">
+            </div>
+            <button type="submit" class="col btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
