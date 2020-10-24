@@ -4,8 +4,8 @@ from .models import Nodes
 import json, time
 
 class Task:
-    time = time.time()
-    period = time.time()
+    time = 1
+    period = 1
     location = ""
     computer = 1
     user = ""
