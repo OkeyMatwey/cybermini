@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from kibermini_nodes.models import Location
+from kibermini_nodes.consumers import loop
+import django_rq as rq
 
 import random
 
@@ -56,6 +58,7 @@ def panel(request):
             request.user.save()
             key = random.randint(1000, 9999)
             print(time, period, location, computer, key)
+            rq.enqueue(loop, period)
             return render(request, "panel.html", {"user": request.user, "locations": Location.objects.all()})
         else:
             return render(request, "panel.html", {"user": request.user, "locations": Location.objects.all()})
