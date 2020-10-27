@@ -1,18 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from kibermini_nodes.models import Location
-from kibermini_nodes.consumers import loop
-import django_rq as rq
-
-import random
+from kibermini_nodes.consumers import manager_task
 
 
 def index(request):
     if request.user.is_authenticated:
         return render(request, 'index.html', {"auth": True})
     return render(request, 'index.html', {"auth": False})
+
 
 def sign_in(request):
     if request.method == "POST":
@@ -25,6 +22,7 @@ def sign_in(request):
         else:
             return redirect("index")
     return render(request, 'sign_in.html')
+
 
 def sign_up(request):
     if request.method == "POST":
@@ -47,19 +45,15 @@ def logout_view(request):
     logout(request)
     return redirect("index")
 
+
 def panel(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            time = request.POST["time"]
-            period = request.POST["period"]
-            location = request.POST["location"]
-            computer = request.POST["computer"]
-            request.user.profile.money = request.user.profile.money - int(period) * 2
-            request.user.save()
-            key = random.randint(1000, 9999)
-            print(time, period, location, computer, key)
-            rq.enqueue(loop, period)
-            return render(request, "panel.html", {"user": request.user, "locations": Location.objects.all()})
+            result = manager_task(request.user.id, request.POST["time"],
+                         request.POST["period"], request.POST["location"],
+                         request.POST["computer"])
+
+            return render(request, "panel.html", {"user": request.user, "locations": Location.objects.all(), "result": result})
         else:
             return render(request, "panel.html", {"user": request.user, "locations": Location.objects.all()})
     else:
