@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          crossorigin="anonymous">
 
     <title>{% block title %}KiberMini{% endblock %}</title>
 </head>
@@ -38,8 +39,10 @@
                 </li>
             </ul>
             <form class="form-inline">
-                <a class="btn btn-outline-success {% block css_class_logout %}{% endblock %}" href="{% url 'logout' %}" role="button">Выйти</a>
-                <a class="btn btn-outline-success {% block css_class_sign_in %}{% endblock %}" href="{% url 'sign_in' %}" role="button">Войти</a>
+                <a class="btn btn-outline-success {% block css_class_logout %}{% endblock %}" href="{% url 'logout' %}"
+                   role="button">Выйти</a>
+                <a class="btn btn-outline-success {% block css_class_sign_in %}{% endblock %}"
+                   href="{% url 'sign_in' %}" role="button">Войти</a>
             </form>
         </div>
     </div>
@@ -50,6 +53,6 @@
 <footer class="conteiner-fluid">
 
 </footer>
-
+    {% block script %}{% endblock %}
 </body>
 </html>

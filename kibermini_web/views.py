@@ -10,7 +10,7 @@ def index(request):
 
 
 def sign_in(request):
-    if request.method == "POST":
+    if request.POST:
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
@@ -23,7 +23,7 @@ def sign_in(request):
 
 
 def sign_up(request):
-    if request.method == "POST":
+    if request.POST:
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -46,7 +46,9 @@ def logout_view(request):
 
 def panel(request):
     if request.user.is_authenticated:
-        if request.method == "POST":
+        if request.is_ajax() and request.POST:
+            pass
+        if request.POST:
             result = manager_task(request.user.id, request.POST["time"],
                                   request.POST["period"], request.POST["location"],
                                   request.POST["computer"])
