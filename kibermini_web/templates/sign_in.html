@@ -1,17 +1,32 @@
 {% extends "base.html" %}
 
+{% block css_class_logout %}
+    {% if not user.is_authenticated %}
+        d-none
+    {% endif %}
+{% endblock %}
+{% block css_class_sign_in %}
+    {% if user.is_authenticated %}
+        d-none
+    {% endif %}
+{% endblock %}
+
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label>Password</label>
-            <input name="username" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input name="password" type="password" class="form-control">
-        </div>
-        <a class="btn btn-outline-success" href="{% url 'sign_up' %}" role="button">регистрация</a>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <div class="row justify-content-center">
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">username</span>
+                </div>
+                <input name="username" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input name="password" type="password" class="form-control">
+            </div>
+            <a class="btn btn-outline-success" href="{% url 'sign_up' %}" role="button">регистрация</a>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 {% endblock %}

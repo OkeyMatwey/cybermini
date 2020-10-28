@@ -19,6 +19,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "widget_tweaks",
     "django_rq",
     'channels',
     'kibermini_nodes.apps.KiberminiNodesConfig',

@@ -1,2 +1,13 @@
 {% extends "base.html" %}
 
+{% block css_class_logout %}
+    {% if not user.is_authenticated %}
+        d-none
+    {% endif %}
+{% endblock %}
+{% block css_class_sign_in %}
+    {% if user.is_authenticated %}
+        d-none
+    {% endif %}
+{% endblock %}
+

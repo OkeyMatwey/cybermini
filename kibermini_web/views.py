@@ -6,9 +6,7 @@ from kibermini_nodes.consumers import manager_task
 
 
 def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'index.html', {"auth": True})
-    return render(request, 'index.html', {"auth": False})
+    return render(request, 'index.html', {"user": request.user})
 
 
 def sign_in(request):
@@ -21,7 +19,7 @@ def sign_in(request):
             return redirect("index")
         else:
             return redirect("index")
-    return render(request, 'sign_in.html')
+    return render(request, 'sign_in.html', {"user": request.user})
 
 
 def sign_up(request):
@@ -35,10 +33,10 @@ def sign_up(request):
                     login(request, user)
                     return redirect("panel")
 
-        return render(request, "sign_up.html", {'form': form})
+        return render(request, "sign_up.html", {"user": request.user, 'form': form})
     else:
         form = UserCreationForm()
-        return render(request, "sign_up.html", {'form': form})
+        return render(request, "sign_up.html", {"user": request.user, 'form': form})
 
 
 def logout_view(request):
@@ -50,10 +48,11 @@ def panel(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             result = manager_task(request.user.id, request.POST["time"],
-                         request.POST["period"], request.POST["location"],
-                         request.POST["computer"])
+                                  request.POST["period"], request.POST["location"],
+                                  request.POST["computer"])
 
-            return render(request, "panel.html", {"user": request.user, "locations": Location.objects.all(), "result": result})
+            return render(request, "panel.html",
+                          {"user": request.user, "locations": Location.objects.all(), "result": result})
         else:
             return render(request, "panel.html", {"user": request.user, "locations": Location.objects.all()})
     else:
