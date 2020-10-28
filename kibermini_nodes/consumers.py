@@ -9,6 +9,8 @@ import random
 import datetime
 import asyncio
 
+channel_layer = get_channel_layer()
+
 def manager_task(user_id, t, p, l, n):
     begin = datetime.datetime.strptime(t, "%d/%m/%y %H:%M")
     end = begin + datetime.timedelta(minutes=int(p))
@@ -37,15 +39,13 @@ def manager_task(user_id, t, p, l, n):
 
 def start_play(schedule_id):
     schedule = Schedule.objects.get(id=schedule_id)
-    channel_layer = get_channel_layer()
     async_to_sync(channel_layer.send)(schedule.node.channel_name, {"type": "chat_message", "text": "start"})
 
 
 def stop_play(schedule_id):
     schedule = Schedule.objects.get(id=schedule_id)
-    channel_layer = get_channel_layer()
     async_to_sync(channel_layer.send)(schedule.node.channel_name, {"type": "chat_message", "text": "stop"})
-
+    schedule.delete()
 
 class NodeConsumer(WebsocketConsumer):
     def connect(self):
