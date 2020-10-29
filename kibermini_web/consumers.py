@@ -18,9 +18,8 @@ class UserConsumer(WebsocketConsumer):
             return
         if data["command"] == "get_nodes":
             l = Nodes.objects.filter(location=data["location"])
-            response = dict
-            response["nodes"] = dict
+            response = {}
+            response["nodes"] = {}
             for i in l:
                 response["nodes"][i.id]=i.number
             self.send(json.dumps(response))
-            return
