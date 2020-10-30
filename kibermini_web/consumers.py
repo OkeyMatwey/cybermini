@@ -1,6 +1,7 @@
 from channels.generic.websocket import WebsocketConsumer
-from kibermini_nodes.models import Nodes
+from kibermini_nodes.models import Nodes, Schedule
 import json
+
 
 class UserConsumer(WebsocketConsumer):
     def connect(self):
@@ -16,10 +17,19 @@ class UserConsumer(WebsocketConsumer):
         except json.JSONDecodeError as jex:
             print("EROR JSON", jex)
             return
-        if data["command"] == "get_nodes":
-            l = Nodes.objects.filter(location=data["location"])
+        if "get_nodes" in data:
+            l = Nodes.objects.filter(location=data["get_nodes"]["location"])
             response = {}
             response["nodes"] = {}
             for i in l:
-                response["nodes"][i.id]=i.number
+                response["nodes"][i.id] = i.number
             self.send(json.dumps(response))
+            return
+        if "get_scheduler" in data:
+            l = Schedule.objects.filter(node=data["get_scheduler"]["node"])
+            response = {}
+            response["scheduler"] = {}
+            for i in l:
+                response["scheduler"][i.begin.strftime("%Y-%m-%d %H:%M:%S")] = i.end.strftime("%Y-%m-%d %H:%M:%S")
+            self.send(json.dumps(response))
+            return
