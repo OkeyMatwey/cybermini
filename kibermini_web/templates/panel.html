@@ -13,49 +13,73 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-sm-12 ">{{ user.profile.money }}</div>
-        <div class="col-sm-3 bg-dark">
-
+        <div class="col-sm-12 mt-1 mb-1">
+        <h3>Добро пожаловать {{ user.username }}, ваш баланс {{ user.profile.money }} р.</h3>
         </div>
-        <div class="col-sm-9 bg-light">
-            <form method="post" class="col">
-                {% csrf_token %}
-                <div class="form-group col">
-                    <label>Select location</label>
-                    <select name="location" class="form-control" onchange="get_nodes(this.value)">
-                        <option value="0"></option>
-                        {% for i in locations %}
-                            <option value="{{ i.id }}">{{ i.city }}, {{ i.street }}, {{ i.building }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group col">
-                    <label>Select computer</label>
-                    <select id="select_computer" name="computer" class="form-control"
-                            onchange="get_scheduler(this.value)">
-                        <option value="0"></option>
-                    </select>
-                </div>
-                <div class="form-group col">
-                    <label>time</label>
-                    <input name="time" type="text" class="form-control">
-                </div>
-                <div class="form-group col">
-                    <label>period</label>
-                    <input name="period" type="text" class="form-control">
-                </div>
-                <div class="form-group col">
-                    <label>{{ result }}</label>
-                </div>
-                <button type="submit" class="col btn btn-primary">Submit</button>
-            </form>
+        <div class="col-sm-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                   aria-controls="v-pills-home" aria-selected="true">Играть</a>
+                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+                   aria-controls="v-pills-profile" aria-selected="false">Profile</a>
+                <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab"
+                   aria-controls="v-pills-messages" aria-selected="false">Messages</a>
+                <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
+                   aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+            </div>
         </div>
-
+        <div class="col-sm-9">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                     aria-labelledby="v-pills-home-tab">
+                    <form method="post" class="col">
+                        {% csrf_token %}
+                        <div class="form-group col">
+                            <label>Выберете адресс</label>
+                            <select name="location" class="form-control" onchange="get_nodes(this.value)">
+                                <option value="0"></option>
+                                {% for i in locations %}
+                                    <option value="{{ i.id }}">{{ i.city }}, {{ i.street }}, {{ i.building }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col d-none" id="select_computer_div">
+                            <label>Выберете номер кабинки</label>
+                            <select id="select_computer" name="computer" class="form-control"
+                                    onchange="get_scheduler(this.value)">
+                            </select>
+                        </div>
+                        <div class="form-group col d-none" id="select_time_div">
+                            <label>time</label>
+                            <input name="time" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col d-none" id="select_period_div">
+                            <label>period</label>
+                            <input name="period" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col">
+                            <label>{{ result }}</label>
+                        </div>
+                        <button type="submit" class="col btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    ...
+                </div>
+                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                    ...
+                </div>
+                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    ...
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
 {% block script %}
     <script>
+
         var socket = new WebSocket("ws://localhost:8000/users/");
         socket.onopen = function () {
             console.log("Соединение установлено.");
@@ -73,13 +97,17 @@
         socket.onmessage = function (event) {
             var json = JSON.parse(event.data);
             if (json["nodes"]) {
-                select = document.getElementById('select_computer');
+                var opt = document.createElement('option');
+                    opt.value = '0';
+                    opt.innerHTML = '';
+                    select_computer.appendChild(opt);
                 for (var item in json["nodes"]) {
-                    var opt = document.createElement('option');
+                    opt = document.createElement('option');
                     opt.value = item;
                     opt.innerHTML = json["nodes"][item];
-                    select.appendChild(opt);
+                    select_computer.appendChild(opt);
                 }
+                select_computer_div.classList.remove("d-none")
             }
             if (json["scheduler"]) {
                 alert(JSON.stringify(json["scheduler"]));
@@ -91,11 +119,16 @@
         };
 
         function get_nodes(location_id) {
-            socket.send(JSON.stringify({"get_nodes": {"location": location_id}}))
+            select_computer.innerHTML = '';
+            if(location_id != "0")
+                socket.send(JSON.stringify({"get_nodes": {"location": location_id}}))
         }
 
         function get_scheduler(node_id) {
-            socket.send(JSON.stringify({"get_scheduler": {"node": node_id}}))
+            select_time_div.classList.remove("d-none")
+            select_period_div.classList.remove("d-none")
+            if(node_id != "0")
+                socket.send(JSON.stringify({"get_scheduler": {"node": node_id}}))
         }
     </script>
 {% endblock %}
