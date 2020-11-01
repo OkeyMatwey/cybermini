@@ -11,6 +11,7 @@ import asyncio
 
 channel_layer = get_channel_layer()
 
+
 def manager_task(user_id, t, p, l, n):
     begin = datetime.datetime.strptime(t, "%d/%m/%y %H:%M")
     end = begin + datetime.timedelta(minutes=int(p))
@@ -23,9 +24,9 @@ def manager_task(user_id, t, p, l, n):
     computer = Nodes.objects.get(location=l, number=n)
     for i in Schedule.objects.filter(node=computer):
         if i.begin.date() == begin.date():
-            if (i.begin.time() <= begin.time() and i.end.time() >= begin.time()) or\
+            if (i.begin.time() <= begin.time() and i.end.time() >= begin.time()) or \
                     (i.begin.time() <= end.time() and i.end.time() >= end.time()):
-                        return "no free"
+                return "no free"
             if i.begin.time() >= begin.time() and i.end.time() <= end.time():
                 return "no free"
 
@@ -37,26 +38,32 @@ def manager_task(user_id, t, p, l, n):
     queue.enqueue_at(end, stop_play, schedule.id)
     return "ok"
 
+
 def start_play(schedule_id):
     schedule = Schedule.objects.get(id=schedule_id)
-    async_to_sync(channel_layer.send)(schedule.node.channel_name, {"type": "chat_message", "text": "start"})
+    async_to_sync(channel_layer.send)(schedule.node.channel_name, {"type": "chat_message", "text": {
+        "create": {"username": schedule.user.username, "key": schedule.key}
+    }})
 
 
 def stop_play(schedule_id):
     schedule = Schedule.objects.get(id=schedule_id)
-    async_to_sync(channel_layer.send)(schedule.node.channel_name, {"type": "chat_message", "text": "stop"})
+    async_to_sync(channel_layer.send)(schedule.node.channel_name, {"type": "chat_message", "text": {
+        "delete": {"username": schedule.user.username}
+    }})
     schedule.delete()
+
 
 class NodeConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
 
     def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)("all", self.channel_name)
+        async_to_sync(self.channel_layer.group_discard)(self.nodes.location, self.channel_name)
         self.nodes.on = False
         self.channel_name = ""
         self.nodes.save()
-        async_to_sync(self.channel_layer.group_discard)("all", self.channel_name)
-        async_to_sync(self.channel_layer.group_discard)(self.nodes.location, self.channel_name)
 
     def receive(self, text_data=None, bytes_data=None):
         try:
@@ -79,4 +86,4 @@ class NodeConsumer(WebsocketConsumer):
 
     def chat_message(self, event):
         # Handles the "chat.message" event when it's sent to us.
-        self.send(text_data=event["text"])
+        self.send(text_data=json.dumps(event["text"]))

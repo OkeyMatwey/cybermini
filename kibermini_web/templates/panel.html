@@ -14,7 +14,7 @@
 {% block content %}
     <div class="row">
         <div class="col-sm-12 mt-1 mb-1">
-        <h3>Добро пожаловать {{ user.username }}, ваш баланс {{ user.profile.money }} р.</h3>
+            <h3>Добро пожаловать {{ user.username }}, ваш баланс {{ user.profile.money }} р.</h3>
         </div>
         <div class="col-sm-3">
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -79,56 +79,62 @@
 
 {% block script %}
     <script>
+        var websocketServerLocation = "ws://localhost:8000/users/";
+        var socket;
 
-        var socket = new WebSocket("ws://localhost:8000/users/");
-        socket.onopen = function () {
-            console.log("Соединение установлено.");
-        };
+        function start() {
+            socket = new WebSocket(websocketServerLocation);
+            socket.onopen = function () {
+                console.log("Соединение установлено.");
+            };
 
-        socket.onclose = function (event) {
-            if (event.wasClean) {
-                console.log('Соединение закрыто чисто');
-            } else {
-                console.log('Обрыв соединения'); // например, "убит" процесс сервера
-            }
-            console.log('Код: ' + event.code + ' причина: ' + event.reason);
-        };
+            socket.onclose = function (event) {
+                if (event.wasClean) {
+                    console.log('Соединение закрыто чисто');
+                } else {
+                    console.log('Обрыв соединения'); // например, "убит" процесс сервера
+                }
+                console.log('Код: ' + event.code + ' причина: ' + event.reason);
+                setTimeout(function(){start()}, 5000);
+            };
 
-        socket.onmessage = function (event) {
-            var json = JSON.parse(event.data);
-            if (json["nodes"]) {
-                var opt = document.createElement('option');
+            socket.onmessage = function (event) {
+                var json = JSON.parse(event.data);
+                if (json["nodes"]) {
+                    var opt = document.createElement('option');
                     opt.value = '0';
                     opt.innerHTML = '';
                     select_computer.appendChild(opt);
-                for (var item in json["nodes"]) {
-                    opt = document.createElement('option');
-                    opt.value = item;
-                    opt.innerHTML = json["nodes"][item];
-                    select_computer.appendChild(opt);
+                    for (var item in json["nodes"]) {
+                        opt = document.createElement('option');
+                        opt.value = item;
+                        opt.innerHTML = json["nodes"][item];
+                        select_computer.appendChild(opt);
+                    }
+                    select_computer_div.classList.remove("d-none")
                 }
-                select_computer_div.classList.remove("d-none")
-            }
-            if (json["scheduler"]) {
-                alert(JSON.stringify(json["scheduler"]));
-            }
-        };
+                if (json["scheduler"]) {
+                    alert(JSON.stringify(json["scheduler"]));
+                }
+            };
 
-        socket.onerror = function (error) {
-            alert("Ошибка " + error.message);
+            socket.onerror = function (error) {
+                alert("Ошибка " + error.message);
+            };
         };
 
         function get_nodes(location_id) {
             select_computer.innerHTML = '';
-            if(location_id != "0")
+            if (location_id != "0")
                 socket.send(JSON.stringify({"get_nodes": {"location": location_id}}))
         }
 
         function get_scheduler(node_id) {
             select_time_div.classList.remove("d-none")
             select_period_div.classList.remove("d-none")
-            if(node_id != "0")
+            if (node_id != "0")
                 socket.send(JSON.stringify({"get_scheduler": {"node": node_id}}))
         }
+        start();
     </script>
 {% endblock %}
