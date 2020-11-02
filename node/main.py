@@ -4,9 +4,14 @@ import json
 import time
 token = 5000
 
-async def producer_handler(websocket):
-    while True:
-        message = await websocket.recv()
+class Session:
+    free = True
+
+def create_user():
+    pass
+
+async def consumer_handler(websocket):
+    async for message in websocket:
         print("data-- ", message)
         try:
             data = json.loads(message)
@@ -18,15 +23,16 @@ async def producer_handler(websocket):
         if "delete" in data:
             print(data["delete"])
 
-async def hello():
-    uri = "ws://127.0.0.1:8000/nodes/"
-    async with websockets.connect(uri) as websocket:
+async def consume():
+    url = "ws://127.0.0.1:8000/nodes/"
+    async with websockets.connect(url) as websocket:
         response = json.dumps({
             'token': token
         })
         await websocket.send(response)
-        await producer_handler(websocket)
+        await consumer_handler(websocket)
 
 if __name__ == '__main__':
-    asyncio.get_event_loop().run_until_complete(hello())
-    asyncio.get_event_loop().run_forever()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(consume())
+    loop.run_forever()
