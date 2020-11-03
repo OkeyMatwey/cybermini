@@ -8,12 +8,5 @@ from kibermini_web import consumers as c2
 
 
 application = ProtocolTypeRouter({
-    'websocket': AuthMiddlewareStack(
-        URLRouter(
-            [
-                url(r"^nodes/$", c1.NodeConsumer),
-                url(r"^users/$", c2.UserConsumer),
-            ]
-        )
-    ),
+
 })

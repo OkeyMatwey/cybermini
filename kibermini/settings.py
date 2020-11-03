@@ -13,7 +13,7 @@ SECRET_KEY = '6(q_^+9172d6@npqh8(v7a23hlx44gyzqpma%oprw0qw@r-1r%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.100', '192.168.0.103', '192.168.0.1']
 
 
 # Application definition
@@ -61,7 +61,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'kibermini.wsgi.application'
-ASGI_APPLICATION = "kibermini.routing.application"
+ASGI_APPLICATION = "kibermini.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

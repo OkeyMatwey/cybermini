@@ -24,7 +24,7 @@ async def consumer_handler(websocket):
             print(data["delete"])
 
 async def consume():
-    url = "ws://127.0.0.1:8000/nodes/"
+    url = "ws://192.168.0.104:8000/nodes/"
     async with websockets.connect(url) as websocket:
         response = json.dumps({
             'token': token
