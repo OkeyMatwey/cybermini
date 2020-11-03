@@ -85,5 +85,6 @@ class NodeConsumer(WebsocketConsumer):
             pass
 
     def chat_message(self, event):
-        # Handles the "chat.message" event when it's sent to us.
-        self.send(text_data=json.dumps(event["text"]))
+        s = json.dumps(event["text"])
+        print(s)
+        self.send(text_data=s)

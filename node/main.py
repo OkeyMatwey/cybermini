@@ -11,7 +11,8 @@ def create_user():
     pass
 
 async def consumer_handler(websocket):
-    async for message in websocket:
+    while True:
+        message = await websocket.recv()
         print("data-- ", message)
         try:
             data = json.loads(message)
@@ -24,7 +25,7 @@ async def consumer_handler(websocket):
             print(data["delete"])
 
 async def consume():
-    url = "ws://192.168.0.104:8000/nodes/"
+    url = "ws://192.168.0.100:8000/nodes/"
     async with websockets.connect(url) as websocket:
         response = json.dumps({
             'token': token
