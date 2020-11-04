@@ -9,8 +9,7 @@ from channels.auth import AuthMiddlewareStack
 from kibermini_nodes import consumers as c1
 from kibermini_web import consumers as c2
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
-django.setup()
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kibermini.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),

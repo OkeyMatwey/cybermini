@@ -24,7 +24,6 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     "widget_tweaks",
-    "django_rq",
     'channels',
     'kibermini_nodes.apps.KiberminiNodesConfig',
     'kibermini_web.apps.KiberminiWebConfig',
@@ -66,23 +65,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kibermini.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -102,10 +90,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 # Celery
 
