@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate, logout
 from kibermini_nodes.models import Location
-from kibermini_nodes.consumers import manager_task
+from kibermini_nodes import tasks
 
 
 def index(request):
@@ -49,7 +49,7 @@ def panel(request):
         if request.is_ajax() and request.POST:
             pass
         if request.POST:
-            result = manager_task(request.user.id, request.POST["time"],
+            result = tasks.manager_task(request.user.id, request.POST["time"],
                                   request.POST["period"], request.POST["location"],
                                   request.POST["computer"])
 
