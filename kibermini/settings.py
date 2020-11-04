@@ -1,5 +1,6 @@
 from pathlib import Path
-
+from django.conf import settings
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -10,6 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '6(q_^+9172d6@npqh8(v7a23hlx44gyzqpma%oprw0qw@r-1r%'
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -122,5 +126,3 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = '/static/'
