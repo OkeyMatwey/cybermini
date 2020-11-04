@@ -1,5 +1,6 @@
 django
 channels
+celery
 channels-redis
 django-widget-tweaks
 django-heroku
