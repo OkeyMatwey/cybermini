@@ -11,8 +11,7 @@ def create_user():
     pass
 
 async def consumer_handler(websocket):
-    while True:
-        message = await websocket.recv()
+    async for message in websocket:
         print("data-- ", message)
         try:
             data = json.loads(message)

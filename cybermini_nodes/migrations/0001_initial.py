@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             name='Nodes',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('location', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='kibermini_nodes.location')),
+                ('location', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cybermini_nodes.location')),
             ],
         ),
     ]

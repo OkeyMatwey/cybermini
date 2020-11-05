@@ -1,5 +1,5 @@
 from channels.generic.websocket import WebsocketConsumer
-from kibermini_nodes.models import Nodes, Schedule
+from cybermini_nodes.models import Nodes, Schedule
 import json
 
 

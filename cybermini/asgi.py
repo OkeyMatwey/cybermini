@@ -6,10 +6,10 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 
-from kibermini_nodes import consumers as c1
-from kibermini_web import consumers as c2
+from cybermini_nodes import consumers as c1
+from cybermini_web import consumers as c2
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kibermini.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cybermini.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),

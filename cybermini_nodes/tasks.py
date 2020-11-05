@@ -1,6 +1,6 @@
 from celery import shared_task
-from kibermini.celery import app
-from kibermini_nodes.models import Nodes, Schedule
+from cybermini.celery import app
+from cybermini_nodes.models import Nodes, Schedule
 from django.contrib.auth.models import User
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer

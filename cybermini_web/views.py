@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate, logout
-from kibermini_nodes.models import Location
-from kibermini_nodes import tasks
+from cybermini_nodes.models import Location
+from cybermini_nodes import tasks
 
 
 def index(request):

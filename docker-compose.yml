@@ -1,0 +1,26 @@
+version: "3.3"
+services:
+
+  server: &server
+    build: ./
+    image: cybermini
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    command: python manage.py runserver 0.0.0.0:8000
+
+  redis:
+    image: redis:latest
+    volumes:
+      - .:/data
+
+  celeryworker:
+    <<: *server
+    image: cybermini
+    depends_on:
+      - server
+    ports: [ ]
+    command: celery -A cybermini worker-l INFO

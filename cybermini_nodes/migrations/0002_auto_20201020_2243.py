@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kibermini_nodes', '0001_initial'),
+        ('cybermini_nodes', '0001_initial'),
     ]
 
     operations = [
