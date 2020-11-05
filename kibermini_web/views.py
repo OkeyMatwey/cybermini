@@ -16,9 +16,9 @@ def sign_in(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("index")
+            return redirect("panel")
         else:
-            return redirect("index")
+            return render(request, 'sign_in.html', {"user": request.user})
     return render(request, 'sign_in.html', {"user": request.user})
 
 

@@ -15,6 +15,9 @@
     <div class="row justify-content-center">
         <form method="post">
             {% csrf_token %}
+            <div class="input-group mb-1 d-none">
+                <h6>Неправильный логин или пароль</h6>
+            </div>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Username</span>
@@ -28,7 +31,7 @@
                 <input name="password" type="password" class="form-control">
             </div>
             <a class="btn btn-outline-success" href="{% url 'sign_up' %}" role="button">регистрация</a>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Войти</button>
         </form>
     </div>
 {% endblock %}
