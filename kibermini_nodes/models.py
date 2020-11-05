@@ -10,8 +10,7 @@ class Nodes(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     number = models.IntegerField()
     token = models.CharField(max_length=256)
-    on = models.BooleanField()
-    channel_name = models.TextField()
+    channel_name = models.TextField(default="")
 
 class Schedule(models.Model):
     node = models.ForeignKey(Nodes, on_delete=models.CASCADE)

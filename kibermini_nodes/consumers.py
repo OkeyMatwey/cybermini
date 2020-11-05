@@ -12,7 +12,6 @@ class NodeConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)("all", self.channel_name)
         async_to_sync(self.channel_layer.group_discard)(self.nodes.location, self.channel_name)
-        self.nodes.on = False
         self.nodes.channel_name = ""
         self.nodes.save()
 
@@ -25,17 +24,17 @@ class NodeConsumer(WebsocketConsumer):
         if data["token"]:
             self.nodes = Nodes.objects.get(token=data['token'])
             if self.nodes:
-                self.nodes.on = True
                 self.nodes.channel_name = self.channel_name
                 self.nodes.save()
+                print(self.channel_name)
                 async_to_sync(self.channel_layer.group_add)("all", self.channel_name)
                 async_to_sync(self.channel_layer.group_add(self.nodes.location, self.channel_name))
             else:
                 self.close()
-        if self.nodes.on:
+        if self.nodes.channel_name:
             pass
 
-    async def chat_message(self, event):
+    def chat_message(self, event):
         s = json.dumps(event["text"])
-        print(s)
-        await self.send(text_data=s)
+        print("massagesssssssssssssssssssssssssssssssssssebat")
+        self.send(text_data=s)

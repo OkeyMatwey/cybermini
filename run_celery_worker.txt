@@ -1,0 +1,1 @@
+celery -A kibermini worker -l INFO

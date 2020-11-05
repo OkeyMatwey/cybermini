@@ -102,5 +102,7 @@ CELERY_RESULT_SERIALIZER = "json"
 
 ASGI_APPLICATION = "kibermini.asgi.application"
 CHANNEL_LAYERS = {
-    "BACKEND": "channels.layers.InMemoryChannelLayer"
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
 }
