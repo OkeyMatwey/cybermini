@@ -1,7 +1,7 @@
 django
 channels
-celery
 channels-redis
+celery
+redis
 django-widget-tweaks
-sqlalchemy
 flower
