@@ -1,6 +1,6 @@
 from channels.generic.websocket import WebsocketConsumer
 from cybermini_nodes.models import Nodes, Schedule
-import json
+import json, datetime
 
 
 class UserConsumer(WebsocketConsumer):
@@ -26,7 +26,7 @@ class UserConsumer(WebsocketConsumer):
             self.send(json.dumps(response))
             return
         if "get_scheduler" in data:
-            l = Schedule.objects.filter(node=data["get_scheduler"]["node"])
+            l = Schedule.objects.filter(node=data["get_scheduler"]["node"], end__day=datetime.datetime.now())
             response = {}
             response["scheduler"] = {}
             for i in l:

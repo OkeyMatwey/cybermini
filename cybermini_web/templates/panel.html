@@ -21,11 +21,7 @@
                 <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
                    aria-controls="v-pills-home" aria-selected="true">Играть</a>
                 <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
-                   aria-controls="v-pills-profile" aria-selected="false">Profile</a>
-                <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab"
-                   aria-controls="v-pills-messages" aria-selected="false">Messages</a>
-                <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
-                   aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+                   aria-controls="v-pills-profile" aria-selected="false">Профиль</a>
             </div>
         </div>
         <div class="col-sm-9">
@@ -45,9 +41,38 @@
                         </div>
                         <div class="form-group col d-none" id="select_computer_div">
                             <label>Выберете номер кабинки</label>
-                            <select id="select_computer" name="computer" class="form-control"
-                                    onchange="get_scheduler(this.value)">
+                            <select id="select_computer" name="computer" class="form-control" onchange="get_scheduler(this.value)">
                             </select>
+                        </div>
+                        <div class="form-group col d-none" id="select_scheduler_div">
+                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home"
+                                       role="tab" aria-controls="pills-home" aria-selected="true">Сегодня</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile"
+                                       role="tab" aria-controls="pills-profile" aria-selected="false">Завтра</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact"
+                                       role="tab" aria-controls="pills-contact" aria-selected="false">Выбрать день</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                     aria-labelledby="pills-home-tab">
+                                    ...
+                                </div>
+                                <div class="tab-pane fade" id="pills-profile" role="tabpanel"
+                                     aria-labelledby="pills-profile-tab">
+                                    ...
+                                </div>
+                                <div class="tab-pane fade" id="pills-contact" role="tabpanel"
+                                     aria-labelledby="pills-contact-tab">
+                                    <input type="date" class="form-control" id="date" name="date" placeholder="Дата" required>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col d-none" id="select_time_div">
                             <label>time</label>
@@ -64,13 +89,7 @@
                     </form>
                 </div>
                 <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                    ...
-                </div>
-                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                    ...
-                </div>
-                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                    ...
+                    Профиль
                 </div>
             </div>
         </div>
@@ -95,7 +114,9 @@
                     console.log('Обрыв соединения'); // например, "убит" процесс сервера
                 }
                 console.log('Код: ' + event.code + ' причина: ' + event.reason);
-                setTimeout(function(){start()}, 5000);
+                setTimeout(function () {
+                    start()
+                }, 5000);
             };
 
             socket.onmessage = function (event) {
@@ -114,7 +135,8 @@
                     select_computer_div.classList.remove("d-none")
                 }
                 if (json["scheduler"]) {
-                    alert(JSON.stringify(json["scheduler"]));
+                    select_scheduler_div.classList.remove("d-none")
+                    console.log(JSON.stringify(json["scheduler"]));
                 }
             };
 
@@ -135,6 +157,7 @@
             if (node_id != "0")
                 socket.send(JSON.stringify({"get_scheduler": {"node": node_id}}))
         }
+
         start();
     </script>
 {% endblock %}

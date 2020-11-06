@@ -5,6 +5,7 @@ class Location(models.Model):
     city = models.CharField(max_length=200)
     street = models.CharField(max_length=200)
     building = models.CharField(max_length=200)
+    time_zone = models.CharField(max_length=3, default="0")
 
 class Nodes(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
