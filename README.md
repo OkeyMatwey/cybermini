@@ -1,5 +1,3 @@
-# cybermini
-
 ## Description
 
 Example Django Channels and Celery
