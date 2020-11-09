@@ -25,11 +25,11 @@ class UserConsumer(WebsocketConsumer):
                 response["nodes"][i.id] = i.number
             self.send(json.dumps(response))
             return
-        if "get_scheduler" in data:
-            l = Schedule.objects.filter(node=data["get_scheduler"]["node"], end__day=datetime.datetime.now())
-            response = {}
-            response["scheduler"] = {}
-            for i in l:
-                response["scheduler"][i.begin.strftime("%Y-%m-%d %H:%M:%S")] = i.end.strftime("%Y-%m-%d %H:%M:%S")
-            self.send(json.dumps(response))
-            return
+        # if "get_scheduler" in data:
+        #     l = Schedule.objects.filter(node=data["get_scheduler"]["node"], end__day=datetime.datetime.now())
+        #     response = {}
+        #     response["scheduler"] = {}
+        #     for i in l:
+        #         response["scheduler"][i.begin.strftime("%Y-%m-%d %H:%M:%S")] = i.end.strftime("%Y-%m-%d %H:%M:%S")
+        #     self.send(json.dumps(response))
+        #     return

@@ -25,7 +25,7 @@ async def consumer_handler(websocket):
 
 async def consume():
     url = "ws://127.0.0.1:8000/nodes/"
-    async with websockets.connect(url) as websocket:
+    async with websockets.connect(url, ping_interval=None) as websocket:
         response = json.dumps({
             'token': token
         })

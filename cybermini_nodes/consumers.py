@@ -36,5 +36,4 @@ class NodeConsumer(WebsocketConsumer):
 
     def chat_message(self, event):
         s = json.dumps(event["text"])
-        print("massagesssssssssssssssssssssssssssssssssssebat")
         self.send(text_data=s)

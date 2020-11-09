@@ -46,8 +46,6 @@ def logout_view(request):
 
 def panel(request):
     if request.user.is_authenticated:
-        if request.is_ajax() and request.POST:
-            pass
         if request.POST:
             result = tasks.manager_task(request.user.id, request.POST["time"],
                                   request.POST["period"], request.POST["location"],
