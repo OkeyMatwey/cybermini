@@ -1,6 +1,6 @@
 ## Description
 
-Example Django Channels and Celery
+Example Django (3.1.3) Channels (3.0)  and Celery (5.0)
 
 ## How to run
 
