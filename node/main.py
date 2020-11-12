@@ -1,7 +1,14 @@
 import asyncio
 import websockets
 import json
+import subprocess
+import sys
 import time
+
+old_username = sys.argv[1]
+new_username = ""
+key = ""
+
 token = 5000
 
 class Session:
@@ -11,6 +18,7 @@ def create_user():
     pass
 
 async def consumer_handler(websocket):
+    global username, key
     async for message in websocket:
         print("data-- ", message)
         try:
@@ -20,6 +28,11 @@ async def consumer_handler(websocket):
             continue
         if "create" in data:
             print(data["create"])
+            new_username = data["create"]["username"]
+            key = data["create"]["key"]
+            subprocess.call("net users {} {}".format(old_username, key), shell=True)
+            subprocess.call("wmic useraccount where name=\"{}\" rename \"{}\"".format(old_username,  new_username), shell=True)
+
         if "delete" in data:
             print(data["delete"])
 

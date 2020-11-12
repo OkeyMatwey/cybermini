@@ -26,7 +26,6 @@ class NodeConsumer(WebsocketConsumer):
             if self.nodes:
                 self.nodes.channel_name = self.channel_name
                 self.nodes.save()
-                print(self.channel_name)
                 async_to_sync(self.channel_layer.group_add)("all", self.channel_name)
                 async_to_sync(self.channel_layer.group_add(self.nodes.location, self.channel_name))
             else:
